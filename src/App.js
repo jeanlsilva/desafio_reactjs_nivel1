@@ -28,17 +28,11 @@ function App() {
   }
 
   async function handleRemoveRepository(id) {
-    const repositoryIndex = repositories.findIndex(repository => repository.id === id);
+    await api.delete(`repositories/${id}`);
 
-    const response = await api.delete(`repositories/${id}`);
-
-    if (repositoryIndex < 0) {
-      return response.status(400).json({ error: 'Repository not found' });
-    }
-
-    api.get('repositories').then(response => {
-      setRepositories(response.data);
-    });
+    setRepositories(repositories.filter(
+      repository => repository.id !== id)
+    );
   }
 
   return (
